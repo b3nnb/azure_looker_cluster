@@ -116,7 +116,8 @@ resource "azurerm_virtual_machine_extension" "looker" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute": "hostname && uptime"
+        "commandToExecute": "sh provision.sh",
+        "fileUris": ["https://raw.githubusercontent.com/drewgillson/azure_looker_cluster/master/provision.sh"]
     }
 SETTINGS
 
