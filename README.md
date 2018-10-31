@@ -19,7 +19,7 @@
 
 1. Use terraform to configure a shared database, whether an "Azure Database for MySQL Server" managed instance or another compute instance dedicated for the shared database. Note that a shared file system mount is already present at `/mnt/lookerfiles`
 
-Troubleshooting related to database connection: 
+> Troubleshooting related to database connection: 
 ```
 # Success with mysql client from app server
 mysql -u looker@lookermysql.mysql.database.azure.com -p -h lookermysql.mysql.database.azure.com
