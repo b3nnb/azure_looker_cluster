@@ -2,6 +2,7 @@
 
 ## Prerequisites
 1. Download an appropriate [terraform binary](https://www.terraform.io/downloads.html) and ensure `terraform` is in your $PATH
+> Optional: read the documentation for the [azurerm provider](https://www.terraform.io/docs/providers/azurerm/index.html) but don't sweat it because there is nothing to configure
 2. Install the Azure CLI:
 `curl -L https://aka.ms/InstallAzureCli | bash`
 3. Login to Azure from the command line by typing `az login`
@@ -12,10 +13,11 @@
 > The purpose of the prefix is to prevent namespace collisions, there are several resources that get created with public URLs and if multiple people use this script without different prefixes, it could cause issues.
 4. Type `terraform init` and make sure there are no errors
 5. Type `terraform apply` and wait 5-10 minutes
+6. Browse to the Looker welcome screen at [https://*dg*-lookerapp*0*.eastus.cloudapp.azure.com:9999/setup], where *dg* is the prefix variable you set, and *0* is an integer corresponding to a provisioned instance.
 
 ## TODO
 
-1. Configure MySQL with Terraform, whether an "Azure Database for MySQL Server" managed instance or another compute instance dedicated for the shared database
+1. Use terraform to configure a shared database, whether an "Azure Database for MySQL Server" managed instance or another compute instance dedicated for the shared database. Note that a shared file system mount is already present at `/mnt/lookerfiles`
 
 Troubleshooting related to database connection: 
 ```
@@ -38,4 +40,4 @@ Java::JavaSql::SQLException: Could not connect: Bad handshake
 Unable to connect to Destination database
 ```
 
-2. Add an Azure load balancer with Terraform
+2. Use terraform to create the load balancer
