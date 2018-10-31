@@ -41,3 +41,7 @@ Unable to connect to Destination database
 ```
 
 2. Use terraform to create the load balancer
+
+3. Split out other parameters into variables, like the region
+
+4. Use terraform to set up monitoring and alerting for the cluster
