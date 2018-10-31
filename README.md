@@ -13,7 +13,7 @@
 > The purpose of the prefix is to prevent namespace collisions, there are several resources that get created with public URLs and if multiple people use this script without different prefixes, it could cause issues.
 4. Type `terraform init` and make sure there are no errors
 5. Type `terraform apply` and wait 5-10 minutes
-6. Browse to the Looker welcome screen at [https://*dg*-lookerapp*0*.eastus.cloudapp.azure.com:9999/setup], where *dg* is the prefix variable you set, and *0* is an integer corresponding to a provisioned instance.
+6. Browse to the Looker welcome screen at [https://*dg*-lookerapp*0*.eastus.cloudapp.azure.com:9999/setup](https://dg-lookerapp0.eastus.cloudapp.azure.com:9999/setup), where *dg* is the prefix variable you set, and *0* is an integer corresponding to a provisioned instance.
 
 ## TODO
 
