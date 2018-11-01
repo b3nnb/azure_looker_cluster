@@ -10,38 +10,14 @@
 ## Get Started
 1. Open a shell and clone this repository
 2. Update the prefix variable at the top of the [azure.tf](https://github.com/drewgillson/azure_looker_cluster/blob/master/azure.tf) file.
-> The purpose of the prefix is to prevent namespace collisions, there are several resources that get created with public URLs and if multiple people use this script without different prefixes, it could cause issues.
-4. Type `terraform init` and make sure there are no errors
-5. Type `terraform apply` and wait 5-10 minutes
-6. Browse to the Looker welcome screen at [https://*dg*-lookerapp*0*.eastus.cloudapp.azure.com:9999/setup](https://dg-lookerapp0.eastus.cloudapp.azure.com:9999/setup), where *dg* is the prefix variable you set, and *0* is an integer corresponding to a provisioned instance.
+> The purpose of the prefix is to prevent DNS namespace collisions, there are several resources that get created with public URLs and if multiple people use this script without different prefixes, it could cause issues.
+4. Type `terraform init` to set things up
+5. Type `terraform apply` and wait about 10 minutes
+6. Now you can browse to the Looker welcome screen at [https://*dg*-looker.*eastus*.cloudapp.azure.com](https://dg-looker.eastus.cloudapp.azure.com), where *dg* is the prefix variable you set and *eastus* is the location.
+> This URL is the endpoint for the load balancer
 
-## TODO
+## Gotchas and Warnings
 
-1. Use terraform to configure a shared database, whether an "Azure Database for MySQL Server" managed instance or another compute instance dedicated for the shared database. Note that a shared file system mount is already present at `/mnt/lookerfiles`
+Note that because the database initialization step takes a little while, the first Looker instance to initialize will start successfully, but the remaining instances will fail to start, because multiple database initializations cannot be run at the same time. When you have confirmed that the first instance has completed the database initialization, you must SSH into each remaining instance and run `sudo systemctl start looker` manually.
 
-> Troubleshooting related to database connection: 
-```
-# Success with mysql client from app server
-mysql -u looker@lookermysql.mysql.database.azure.com -p -h lookermysql.mysql.database.azure.com
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 64849
-Server version: 5.6.39.0 MySQL Community Server (GPL)
-
-# First attempt from looker - doesn't like that SSL is required
-looker@lookerapp0:~/looker$ ./looker migrate_internal_data looker-db.yml
-Source database connection successful
-Java::JavaSql::SQLException: Could not connect: SSL connection is required. Please specify SSL options and retry.
-Unable to connect to Destination database
-
-# Second attempt from looker with SSL turned off - bad handshake error
-looker@lookerapp0:~/looker$ ./looker migrate_internal_data looker-db.yml
-Source database connection successful
-Java::JavaSql::SQLException: Could not connect: Bad handshake
-Unable to connect to Destination database
-```
-
-2. Use terraform to create the load balancer
-
-3. Split out other parameters into variables, like the region
-
-4. Use terraform to set up monitoring and alerting for the cluster
+### Do not deploy to production without locking the shared database down! ###
