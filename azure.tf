@@ -277,11 +277,16 @@ resource "azurerm_virtual_machine" "looker" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo apt-get update -y",
       "sudo apt-get install libssl-dev -y",
       "sudo apt-get install cifs-utils -y",
+      "sudo apt-get install fonts-freefont-otf -y",
+      "sudo apt-get install chromium-browser -y",
       "curl https://raw.githubusercontent.com/looker/customer-scripts/master/startup_scripts/systemd/looker.service -O",
       "sudo mv looker.service /etc/systemd/system/looker.service",
       "sudo chmod 664 /etc/systemd/system/looker.service",
+      "sudo sed -i 's/TimeoutStartSec=500/TimeoutStartSec=500\nEnvironment=CHROMIUM_PATH=\\/usr\\/bin\\/chromium-browser/' /etc/systemd/system/looker.service",
+      "echo \"Environment=CHROMIUM_PATH=/usr/bin/chromium-browser\" | sudo tee -a /etc/systemd/system/looker.service",
       "echo \"net.ipv4.tcp_keepalive_time=200\" | sudo tee -a /etc/sysctl.conf",
       "echo \"net.ipv4.tcp_keepalive_intvl=200\" | sudo tee -a /etc/sysctl.conf",
       "echo \"net.ipv4.tcp_keepalive_probes=5\" | sudo tee -a /etc/sysctl.conf",
@@ -297,8 +302,8 @@ resource "azurerm_virtual_machine" "looker" {
       "sudo chown looker:looker -R jdk1.8.0_191",
       "sudo rm jdk-8u191-linux-x64.tar.gz",
       "cd /home/looker/looker",
-      "sudo curl https://s3.amazonaws.com/download.looker.com/aeHee2HiNeekoh3uIu6hec3W/looker-latest.jar -O",
-      "sudo mv looker-latest.jar looker.jar",
+      "sudo curl https://s3.amazonaws.com/download.looker.com/aeHee2HiNeekoh3uIu6hec3W/looker-6.0-latest.jar -O",
+      "sudo mv looker-6.0-latest.jar looker.jar",
       "sudo chown looker:looker looker.jar",
       "sudo curl https://raw.githubusercontent.com/looker/customer-scripts/master/startup_scripts/looker -O",
       "sudo chmod 0750 looker",
@@ -430,6 +435,7 @@ resource "azurerm_virtual_machine" "lookerdb" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo apt-get update -y",
       "sudo apt-get install mysql-server-5.7 -y",
       "sudo sed -i 's/bind-address/#bind-address/' /etc/mysql/mysql.conf.d/mysqld.cnf",
       "sudo /etc/init.d/mysql restart",
