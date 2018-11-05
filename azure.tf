@@ -127,6 +127,20 @@ resource "azurerm_lb_rule" "looker" {
   idle_timeout_in_minutes        = 30
 }
 
+# Create a load balancer rule to route inbound traffic on the public IP port 19999 to port 19999 of an instance (for API)
+resource "azurerm_lb_rule" "looker" {
+  resource_group_name            = "${azurerm_resource_group.looker.name}"
+  loadbalancer_id                = "${azurerm_lb.looker.id}"
+  name                           = "LBRuleforAPI"
+  protocol                       = "Tcp"
+  frontend_port                  = 19999
+  backend_port                   = 19999
+  backend_address_pool_id        = "${azurerm_lb_backend_address_pool.looker.id}"
+  probe_id                       = "${azurerm_lb_probe.looker.id}"
+  frontend_ip_configuration_name = "PublicIPAddress"
+  idle_timeout_in_minutes        = 30
+}
+
 # Create an Azure storage account
 resource "azurerm_storage_account" "looker" {
   name                     = "${var.domainprefix}lookerstorage"
